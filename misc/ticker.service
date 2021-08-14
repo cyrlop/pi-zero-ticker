@@ -1,0 +1,13 @@
+[Unit]
+Description=Ticker Service
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+WorkingDirectory=/home/pi/
+User=pi
+Type=simple
+ExecStart=/usr/bin/python3 /home/pi/pi-zero-ticker/ticker/ticker.py -d 6 -s GME
+
+[Install]
+WantedBy=multi-user.target
