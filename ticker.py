@@ -4,7 +4,7 @@ import time
 from inky import InkyPHAT_SSD1608
 from PIL import Image, ImageDraw
 
-from stock_utils import get_ticker, get_last_price
+from stock_utils import get_quote_data, get_last_price
 from display_utils import draw_text
 
 
@@ -15,8 +15,8 @@ def main(symbol, delay, *args, **kwargs):
 
     while True:
         # Gather ticker data
-        ticker = get_ticker(symbol)
-        price = get_last_price(ticker)
+        quote_data = get_quote_data(symbol)
+        price = get_last_price(quote_data)
         print(price)
 
         # Show data on display

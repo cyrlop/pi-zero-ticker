@@ -1,26 +1,29 @@
-import yfinance
+from yahoo_fin import stock_info
 
 
-def get_ticker(ticker_symbol):
-    """Get yfinance ticker object from a symbol
+
+def get_quote_data(symbol):
+    """Get quote data a ticker symbol
 
     Args:
-        ticker_symbol (str): ticker symbol
+        symbol (str): ticker symbol
 
     Returns:
-        Ticker: yfinance ticker object
+        dict: quote data
     """
-    return yfinance.Ticker(ticker_symbol)
+    return stock_info.get_quote_data(symbol)
 
 
-def get_last_price(ticker):
+
+def get_last_price(quote_data):
     """Get last ticker price
 
     Args:
-        ticker (Ticker): yfinance ticker object
+        quote_data (dict): quote data returned by yahoo_fin
 
     Returns:
         float: last ticker price
     """
-    last_price = ticker.history().tail(1)["Close"].iloc[0]
+    last_price = quote_data["regularMarketPrice"]
     return round(last_price, 2)
+
