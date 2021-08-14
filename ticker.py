@@ -3,6 +3,10 @@ import time
 
 import yfinance
 
+from inky import InkyPHAT_SSD1608
+from PIL import Image, ImageFont, ImageDraw
+from font_fredoka_one import FredokaOne
+
 
 def get_ticker(ticker_symbol):
     """Get yfinance ticker object from a symbol
@@ -31,6 +35,10 @@ def get_last_price(ticker):
 
 def main(symbol, delay, *args, **kwargs):
 
+    # Initialize display
+    inkyphat = InkyPHAT_SSD1608('black')
+
+
     while True:
         # Gather ticker data
         ticker = get_ticker(symbol)
@@ -38,7 +46,32 @@ def main(symbol, delay, *args, **kwargs):
         print(price)
 
         # Show data on display
-        # TODO
+        img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
+        draw = ImageDraw.Draw(img)
+
+        font = ImageFont.truetype(FredokaOne, 52)
+        message = f"{price}"
+        w, h = font.getsize(message)
+        x = (inkyphat.WIDTH / 2) - (w / 2)
+        y = (inkyphat.HEIGHT / 2) - (h / 2)
+        draw.text((x, y), message, inkyphat.BLACK, font)
+
+        font = ImageFont.truetype(FredokaOne, 24)
+        message = f"${symbol}"
+        w, h = font.getsize(message)
+        x = (inkyphat.WIDTH / 2) - (w / 2)
+        y = 0
+        draw.text((x, y), message, inkyphat.BLACK, font)
+
+        font = ImageFont.truetype(FredokaOne, 18)
+        message = "Market opened/closed?"
+        w, h = font.getsize(message)
+        x = (inkyphat.WIDTH / 2) - (w / 2)
+        y = inkyphat.HEIGHT - h
+        draw.text((x, y), message, inkyphat.BLACK, font)
+
+        inkyphat.set_image(img)
+        inkyphat.show()
 
         time.sleep(delay)
 
@@ -65,3 +98,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main(**vars(args))
+
