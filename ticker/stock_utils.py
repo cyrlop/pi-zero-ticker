@@ -16,19 +16,6 @@ def get_quote_data(symbol):
         raise Exception(f"get_quote_data() failed: {e}")
 
 
-def get_last_price(quote_data):
-    """Get last ticker price
-
-    Args:
-        quote_data (dict): quote data returned by yahoo_fin
-
-    Returns:
-        float: last ticker price
-    """
-    last_price = quote_data["regularMarketPrice"]
-    return round(last_price, 2)
-
-
 def get_error_messages(e):
     """Get messages to display from an Exception
 

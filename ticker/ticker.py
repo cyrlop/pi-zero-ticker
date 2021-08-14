@@ -6,7 +6,6 @@ from PIL import Image, ImageDraw
 
 from stock_utils import (
     get_quote_data,
-    get_last_price,
     get_messages,
     get_error_messages,
 )
