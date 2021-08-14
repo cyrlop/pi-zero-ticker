@@ -1,43 +1,17 @@
 import argparse
 import time
 
-import yfinance
-
 from inky import InkyPHAT_SSD1608
-from PIL import Image, ImageFont, ImageDraw
-from font_fredoka_one import FredokaOne
+from PIL import Image, ImageDraw
 
-
-def get_ticker(ticker_symbol):
-    """Get yfinance ticker object from a symbol
-
-    Args:
-        ticker_symbol (str): ticker symbol
-
-    Returns:
-        Ticker: yfinance ticker object
-    """
-    return yfinance.Ticker(ticker_symbol)
-
-
-def get_last_price(ticker):
-    """Get last ticker price
-
-    Args:
-        ticker (Ticker): yfinance ticker object
-
-    Returns:
-        float: last ticker price
-    """
-    last_price = ticker.history().tail(1)["Close"].iloc[0]
-    return round(last_price, 2)
+from stock_utils import get_ticker, get_last_price
+from display_utils import draw_text
 
 
 def main(symbol, delay, *args, **kwargs):
 
     # Initialize display
     inkyphat = InkyPHAT_SSD1608('black')
-
 
     while True:
         # Gather ticker data
@@ -49,26 +23,27 @@ def main(symbol, delay, *args, **kwargs):
         img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
         draw = ImageDraw.Draw(img)
 
-        font = ImageFont.truetype(FredokaOne, 52)
-        message = f"{price}"
-        w, h = font.getsize(message)
-        x = (inkyphat.WIDTH / 2) - (w / 2)
-        y = (inkyphat.HEIGHT / 2) - (h / 2)
-        draw.text((x, y), message, inkyphat.BLACK, font)
-
-        font = ImageFont.truetype(FredokaOne, 24)
-        message = f"${symbol}"
-        w, h = font.getsize(message)
-        x = (inkyphat.WIDTH / 2) - (w / 2)
-        y = 0
-        draw.text((x, y), message, inkyphat.BLACK, font)
-
-        font = ImageFont.truetype(FredokaOne, 18)
-        message = "Market opened/closed?"
-        w, h = font.getsize(message)
-        x = (inkyphat.WIDTH / 2) - (w / 2)
-        y = inkyphat.HEIGHT - h
-        draw.text((x, y), message, inkyphat.BLACK, font)
+        draw = draw_text(
+            inkyphat,
+            draw,
+            message=f"${symbol}",
+            font_size=24,
+            y_align="top",
+        )
+        draw = draw_text(
+            inkyphat,
+            draw,
+            message=f"{price}",
+            font_size=52,
+            y_align="middle",
+        )
+        draw = draw_text(
+            inkyphat,
+            draw,
+            message="Market opened/closed?",
+            font_size=18,
+            y_align="bottom",
+        )
 
         inkyphat.set_image(img)
         inkyphat.show()
