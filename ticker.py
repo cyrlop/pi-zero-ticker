@@ -4,46 +4,34 @@ import time
 from inky import InkyPHAT_SSD1608
 from PIL import Image, ImageDraw
 
-from stock_utils import get_quote_data, get_last_price
+from stock_utils import get_quote_data, get_last_price, get_messages
 from display_utils import draw_text
 
 
 def main(symbol, delay, *args, **kwargs):
 
     # Initialize display
-    inkyphat = InkyPHAT_SSD1608('black')
+    inkyphat = InkyPHAT_SSD1608("black")
 
     while True:
         # Gather ticker data
         quote_data = get_quote_data(symbol)
-        price = get_last_price(quote_data)
-        print(price)
+        messages = get_messages(symbol, quote_data)
 
         # Show data on display
         img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
         draw = ImageDraw.Draw(img)
 
-        draw = draw_text(
-            inkyphat,
-            draw,
-            message=f"${symbol}",
-            font_size=24,
-            y_align="top",
-        )
-        draw = draw_text(
-            inkyphat,
-            draw,
-            message=f"{price}",
-            font_size=52,
-            y_align="middle",
-        )
-        draw = draw_text(
-            inkyphat,
-            draw,
-            message="Market opened/closed?",
-            font_size=18,
-            y_align="bottom",
-        )
+        font_sizes = {"top": 24, "middle": 52, "bottom": 18}
+
+        for location, message in messages.items():
+            draw = draw_text(
+                inkyphat,
+                draw,
+                message=message,
+                font_size=font_sizes[location],
+                y_align=location,
+            )
 
         inkyphat.set_image(img)
         inkyphat.show()
@@ -73,4 +61,3 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     main(**vars(args))
-
