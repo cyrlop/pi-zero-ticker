@@ -4,7 +4,12 @@ import time
 from inky import InkyPHAT_SSD1608
 from PIL import Image, ImageDraw
 
-from stock_utils import get_quote_data, get_last_price, get_messages
+from stock_utils import (
+    get_quote_data,
+    get_last_price,
+    get_messages,
+    get_error_messages,
+)
 from display_utils import draw_text
 
 
@@ -15,8 +20,11 @@ def main(symbol, delay, *args, **kwargs):
 
     while True:
         # Gather ticker data
-        quote_data = get_quote_data(symbol)
-        messages = get_messages(symbol, quote_data)
+        try:
+            quote_data = get_quote_data(symbol)
+            messages = get_messages(symbol, quote_data)
+        except Exception as e:
+            messages = get_error_messages(e)
 
         # Show data on display
         img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))

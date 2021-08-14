@@ -10,7 +10,10 @@ def get_quote_data(symbol):
     Returns:
         dict: quote data
     """
-    return stock_info.get_quote_data(symbol)
+    try:
+        return stock_info.get_quote_data(symbol)
+    except Exception as e:
+        raise Exception(f"get_quote_data() failed: {e}")
 
 
 def get_last_price(quote_data):
@@ -24,6 +27,22 @@ def get_last_price(quote_data):
     """
     last_price = quote_data["regularMarketPrice"]
     return round(last_price, 2)
+
+
+def get_error_messages(e):
+    """Get messages to display from an Exception
+
+    Args:
+        e (Exception): Exception
+
+    Returns:
+        dict: top, middle en bottom messages to display
+    """
+    return {
+        "top": "",
+        "middle": "ERROR",
+        "bottom": str(e)[:min(len(str(e)), 25)] + "..."
+    }
 
 
 def get_messages(symbol, quote_data):
