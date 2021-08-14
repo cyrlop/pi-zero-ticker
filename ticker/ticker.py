@@ -9,11 +9,10 @@ from stock_utils import (
     get_messages,
     get_error_messages,
 )
-from display_utils import draw_text
+from display_utils import draw_text, draw_messages
 
 
 def main(symbol, delay, *args, **kwargs):
-
     # Initialize display
     inkyphat = InkyPHAT_SSD1608("black")
 
@@ -26,19 +25,11 @@ def main(symbol, delay, *args, **kwargs):
             messages = get_error_messages(e)
 
         # Show data on display
-        img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
-        draw = ImageDraw.Draw(img)
-
         font_sizes = {"top": 24, "middle": 52, "bottom": 18}
 
-        for location, message in messages.items():
-            draw = draw_text(
-                inkyphat,
-                draw,
-                message=message,
-                font_size=font_sizes[location],
-                y_align=location,
-            )
+        img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
+        draw = ImageDraw.Draw(img)
+        draw = draw_messages(inkyphat, draw, messages, font_sizes)
 
         inkyphat.set_image(img)
         inkyphat.show()

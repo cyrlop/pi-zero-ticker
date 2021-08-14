@@ -30,3 +30,30 @@ def draw_text(display, draw, message, font_size=24, y_align="middle"):
 
     draw.text((x, y), message, display.BLACK, font)
     return draw
+
+
+def draw_messages(
+    display,
+    draw,
+    messages,
+    font_sizes={"top": 24, "middle": 52, "bottom": 18},
+):
+    """Get yfinance ticker object from a symbol
+
+    Args:
+        display (Inky): Inky display object
+        draw (ImageDraw): ImageDraw object
+        messages (dict): messages with the keys "middle", "top" and "bottom"
+        font_sizes (dict): Font sizes dict with the keys "middle", "top" and "bottom" 
+    Returns:
+        draw (ImageDraw): Updated ImageDraw object
+    """
+    for location, message in messages.items():
+        draw = draw_text(
+            display,
+            draw,
+            message=message,
+            font_size=font_sizes[location],
+            y_align=location,
+        )
+    return draw
