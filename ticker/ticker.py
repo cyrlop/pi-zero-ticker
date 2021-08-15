@@ -3,7 +3,7 @@ import time
 
 from PIL import Image, ImageDraw
 
-from inkyphat_custom import InkyPHAT_SSD1608_Custom
+from inkyphat_custom import InkyPHAT_SSD1608_Custom, InkyPHAT_SSD1608_Fast
 
 from stock_utils import (
     get_quote_data,
@@ -15,7 +15,7 @@ from display_utils import draw_text, draw_messages
 
 def main(symbol, delay, hflip, vflip, *args, **kwargs):
     # Initialize display
-    inkyphat = InkyPHAT_SSD1608_Custom(
+    inkyphat = InkyPHAT_SSD1608_Fast(
         colour="black",
         h_flip=hflip,
         v_flip=vflip,
@@ -37,7 +37,7 @@ def main(symbol, delay, hflip, vflip, *args, **kwargs):
         draw = draw_messages(inkyphat, draw, messages, font_sizes)
 
         inkyphat.set_image(img)
-        inkyphat.show()
+        inkyphat.show_stay_awake()
 
         time.sleep(delay)
 
