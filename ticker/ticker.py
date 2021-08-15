@@ -1,8 +1,9 @@
 import argparse
 import time
 
-from inky import InkyPHAT_SSD1608
 from PIL import Image, ImageDraw
+
+from inkyphat_custom import InkyPHAT_SSD1608_Custom
 
 from stock_utils import (
     get_quote_data,
@@ -12,9 +13,13 @@ from stock_utils import (
 from display_utils import draw_text, draw_messages
 
 
-def main(symbol, delay, *args, **kwargs):
+def main(symbol, delay, hflip, vflip, *args, **kwargs):
     # Initialize display
-    inkyphat = InkyPHAT_SSD1608("black")
+    inkyphat = InkyPHAT_SSD1608_Custom(
+        colour="black",
+        h_flip=hflip,
+        v_flip=vflip,
+    )
 
     while True:
         # Gather ticker data
@@ -54,6 +59,16 @@ if __name__ == "__main__":
         type=int,
         help="Ticker refresh interval (in sec)",
         default=10,
+    )
+    parser.add_argument(
+        "--hflip",
+        help="Horizontally flip display",
+        action="store_true"
+    )
+    parser.add_argument(
+        "--vflip",
+        help="Vertically flip display",
+        action="store_true"
     )
 
     args = parser.parse_args()
