@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import numpy
 from inky.inky_ssd1608 import Inky, CS0_PIN, DC_PIN, RESET_PIN, BUSY_PIN
 from inky import ssd1608
@@ -133,7 +132,3 @@ class Inky_SSD1608_Fast(Inky):
 
         self._busy_wait()
         self._send_command(ssd1608.MASTER_ACTIVATE)
-=======
-from inky.inky_ssd1608 import Inky
-
->>>>>>> af9f8f8908e2a487b800f8f2d1de648dee0874cc
