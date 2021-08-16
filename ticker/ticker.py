@@ -21,13 +21,20 @@ def main(symbol, delay, hflip, vflip, *args, **kwargs):
         v_flip=vflip,
     )
 
+    messages = None
     while True:
         # Gather ticker data
         try:
             quote_data = get_quote_data(symbol)
-            messages = get_messages(symbol, quote_data)
+            new_messages = get_messages(symbol, quote_data)
         except Exception as e:
-            messages = get_error_messages(e)
+            new_messages = get_error_messages(e)
+
+        if messages == new_messages:
+            time.sleep(delay)
+            continue
+        else:
+            messages = new_messages
 
         # Show data on display
         font_sizes = {"top": 24, "middle": 52, "bottom": 18}

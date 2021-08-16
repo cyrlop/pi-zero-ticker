@@ -32,6 +32,22 @@ def get_error_messages(e):
     }
 
 
+def get_rounded(data, key):
+    """Get rounded value if value is not None
+
+    Args:
+        data (dict): data containing the key
+        key (str): key to get the value from the data
+
+    Returns:
+        float: rounded value
+    """
+    value = data.get(key)
+    if value is not None:
+        value = round(value, 2)
+    return value
+
+
 def get_messages(symbol, quote_data):
     """Get messages to display depending on market status and other things
 
@@ -43,7 +59,7 @@ def get_messages(symbol, quote_data):
     """
     messages = {
         "top": f"${symbol}",
-        "middle": f"{quote_data.get('regularMarketPrice')}",
+        "middle": f"{get_rounded(quote_data, 'regularMarketPrice')}",
         "bottom": "",
     }
 
@@ -53,8 +69,8 @@ def get_messages(symbol, quote_data):
     if market_state == "OPEN":
         pass
     elif market_state == "PRE":
-        messages["bottom"] += f" > {quote_data.get('preMarketPrice')}"
+        messages["bottom"] += f" > {get_rounded(quote_data, 'preMarketPrice')}"
     elif market_state in ["POST", "CLOSED", "PREPRE"]:
-        messages["bottom"] += f" > {quote_data.get('postMarketPrice')}"
+        messages["bottom"] += f" > {get_rounded(quote_data, 'postMarketPrice')}"
 
     return messages
