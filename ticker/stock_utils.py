@@ -54,7 +54,7 @@ def get_messages(symbol, quote_data):
         pass
     elif market_state == "PRE":
         messages["bottom"] += f" > {quote_data.get('preMarketPrice')}"
-    elif market_state in ["POST", "CLOSED"]:
+    elif market_state in ["POST", "CLOSED", "PREPRE"]:
         messages["bottom"] += f" > {quote_data.get('postMarketPrice')}"
 
     return messages
