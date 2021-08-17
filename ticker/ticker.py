@@ -37,7 +37,7 @@ def main(symbol, delay, hflip, vflip, *args, **kwargs):
             messages = new_messages
 
         # Show data on display
-        font_sizes = {"top": 24, "middle": 52, "bottom": 18}
+        font_sizes = {"top": 24, "middle": 58, "bottom": 18}
 
         img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
         draw = ImageDraw.Draw(img)
