@@ -17,6 +17,12 @@ def draw_text(display, draw, message, font_size=24, y_align="middle"):
     font = ImageFont.truetype(FredokaOne, font_size)
     w, h = font.getsize(message)
 
+    # Scale down font if the text is bigger than the screen
+    if (w > display.WIDTH):
+        font_size = int(font_size*display.WIDTH/w)
+        font = ImageFont.truetype(FredokaOne, font_size)
+        w, h = font.getsize(message)
+
     x = (display.WIDTH / 2) - (w / 2)
 
     if y_align == "middle":
