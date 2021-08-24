@@ -57,9 +57,11 @@ def get_messages(symbol, quote_data):
     Returns:
         dict: top, middle en bottom messages to display
     """
+    price = get_rounded(quote_data, 'regularMarketPrice')
+
     messages = {
         "top": f"${symbol}",
-        "middle": f"{get_rounded(quote_data, 'regularMarketPrice')}",
+        "middle": f"{price:,}",
         "bottom": "",
     }
 
