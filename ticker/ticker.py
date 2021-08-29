@@ -7,10 +7,10 @@ from inkyphat_custom import InkyPHAT_SSD1608_Custom
 
 from stock_utils import (
     get_quote_data,
-    get_messages,
+    get_simple_messages,
     get_error_messages,
 )
-from display_utils import draw_text, draw_messages
+from display_utils import draw_text, draw_simple_messages
 
 
 def main(symbol, mode, delay, hflip, vflip, *args, **kwargs):
@@ -27,7 +27,7 @@ def main(symbol, mode, delay, hflip, vflip, *args, **kwargs):
             # Gather ticker data
             try:
                 quote_data = get_quote_data(symbol)
-                new_messages = get_messages(symbol, quote_data)
+                new_messages = get_simple_messages(symbol, quote_data)
             except Exception as e:
                 new_messages = get_error_messages(e)
 
@@ -42,7 +42,7 @@ def main(symbol, mode, delay, hflip, vflip, *args, **kwargs):
 
             img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
             draw = ImageDraw.Draw(img)
-            draw = draw_messages(inkyphat, draw, messages, font_sizes)
+            draw = draw_simple_messages(inkyphat, draw, messages, font_sizes)
 
         elif mode == "graph":
             raise NotImplementedError("The mode 'graph' is not implemented yet")

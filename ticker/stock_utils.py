@@ -48,7 +48,7 @@ def get_rounded(data, key):
     return value
 
 
-def get_messages(symbol, quote_data):
+def get_simple_messages(symbol, quote_data):
     """Get messages to display depending on market status and other things
 
     Args:

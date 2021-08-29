@@ -38,7 +38,7 @@ def draw_text(display, draw, message, font_size=24, y_align="middle"):
     return draw
 
 
-def draw_messages(
+def draw_simple_messages(
     display,
     draw,
     messages,
