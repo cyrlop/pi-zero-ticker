@@ -1,5 +1,6 @@
 import argparse
 import time
+import copy
 
 from PIL import Image, ImageDraw
 
@@ -10,7 +11,10 @@ from stock_utils import (
     get_simple_messages,
     get_error_messages,
 )
-from display_utils import draw_text, draw_simple_messages
+from display_utils import (
+    draw_text,
+    draw_simple_messages,
+)
 
 
 def main(symbol, mode, delay, hflip, vflip, *args, **kwargs):
@@ -20,35 +24,32 @@ def main(symbol, mode, delay, hflip, vflip, *args, **kwargs):
         h_flip=hflip,
         v_flip=vflip,
     )
+    last_img = None
 
-    messages = None
+    font_sizes = {"top": 24, "middle": 58, "bottom": 18}
+
     while True:
+        img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
+        draw = ImageDraw.Draw(img)
+
         if mode == "simple":
             # Gather ticker data
             try:
                 quote_data = get_quote_data(symbol)
-                new_messages = get_simple_messages(symbol, quote_data)
+                messages = get_simple_messages(symbol, quote_data)
             except Exception as e:
-                new_messages = get_error_messages(e)
+                messages = get_error_messages(e)
 
-            if messages == new_messages:
-                time.sleep(delay)
-                continue
-            else:
-                messages = new_messages
-
-            # Show data on display
-            font_sizes = {"top": 24, "middle": 58, "bottom": 18}
-
-            img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
-            draw = ImageDraw.Draw(img)
             draw = draw_simple_messages(inkyphat, draw, messages, font_sizes)
 
         elif mode == "graph":
             raise NotImplementedError("The mode 'graph' is not implemented yet")
 
-        inkyphat.set_image(img)
-        inkyphat.show()
+        # Show data on display
+        if img != last_img:
+            inkyphat.set_image(img)
+            inkyphat.show()
+            last_img = img.copy()
 
         time.sleep(delay)
 
