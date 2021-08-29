@@ -1,4 +1,5 @@
 from yahoo_fin import stock_info
+from datetime import date, timedelta
 
 
 def get_quote_data(symbol):
@@ -14,6 +15,27 @@ def get_quote_data(symbol):
         return stock_info.get_quote_data(symbol)
     except Exception as e:
         raise Exception(f"get_quote_data() failed: {e}")
+
+def get_data(symbol):
+    """Get quote data a ticker symbol
+
+    Args:
+        symbol (str): ticker symbol
+
+    Returns:
+        dataframe
+    """
+    try:
+        today = date.today()
+        df = stock_info.get_data(
+            symbol,
+            start_date=today-timedelta(days=60),
+            end_date=today,
+        )
+        return df
+    except Exception as e:
+        raise Exception(f"get_graph_data() failed: {e}")
+
 
 
 def get_error_messages(e):

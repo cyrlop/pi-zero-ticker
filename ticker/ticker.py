@@ -8,12 +8,14 @@ from inkyphat_custom import InkyPHAT_SSD1608_Custom
 
 from stock_utils import (
     get_quote_data,
+    get_data,
     get_simple_messages,
     get_error_messages,
 )
 from display_utils import (
     draw_text,
     draw_simple_messages,
+    draw_graph_data,
 )
 
 
@@ -43,7 +45,14 @@ def main(symbol, mode, delay, hflip, vflip, *args, **kwargs):
             draw = draw_simple_messages(inkyphat, draw, messages, font_sizes)
 
         elif mode == "graph":
-            raise NotImplementedError("The mode 'graph' is not implemented yet")
+            try:
+                data = get_data(symbol)
+                quote_data = get_quote_data(symbol)
+                messages = get_simple_messages(symbol, quote_data)
+                draw = draw_graph_data(inkyphat, draw, data, messages)
+            except Exception as e:
+                messages = get_error_messages(e)
+                draw = draw_simple_messages(inkyphat, draw, messages, font_sizes)
 
         # Show data on display
         if img != last_img:
