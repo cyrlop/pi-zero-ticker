@@ -16,6 +16,7 @@ def get_quote_data(symbol):
     except Exception as e:
         raise Exception(f"get_quote_data() failed: {e}")
 
+
 def get_data(symbol, days):
     """Get quote data a ticker symbol
 
@@ -29,13 +30,12 @@ def get_data(symbol, days):
         today = date.today()
         df = stock_info.get_data(
             symbol,
-            start_date=today-timedelta(days=days),
+            start_date=today - timedelta(days=days),
             end_date=today,
         )
         return df
     except Exception as e:
         raise Exception(f"get_graph_data() failed: {e}")
-
 
 
 def get_error_messages(e):
@@ -50,7 +50,7 @@ def get_error_messages(e):
     return {
         "top": "",
         "middle": "ERROR",
-        "bottom": str(e)[:min(len(str(e)), 25)] + "..."
+        "bottom": str(e)[: min(len(str(e)), 25)] + "...",
     }
 
 
@@ -79,7 +79,7 @@ def get_simple_messages(symbol, quote_data):
     Returns:
         dict: top, middle en bottom messages to display
     """
-    price = get_rounded(quote_data, 'regularMarketPrice')
+    price = get_rounded(quote_data, "regularMarketPrice")
 
     messages = {
         "top": f"${symbol}",
