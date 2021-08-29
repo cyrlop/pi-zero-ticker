@@ -19,7 +19,16 @@ from display_utils import (
 )
 
 
-def main(symbol, mode, delay, hflip, vflip, *args, **kwargs):
+def main(
+    symbol,
+    mode,
+    delay,
+    graph_range,
+    hflip,
+    vflip,
+    *args,
+    **kwargs
+):
     # Initialize display
     inkyphat = InkyPHAT_SSD1608_Custom(
         colour="black",
@@ -46,10 +55,10 @@ def main(symbol, mode, delay, hflip, vflip, *args, **kwargs):
 
         elif mode == "graph":
             try:
-                data = get_data(symbol)
+                data = get_data(symbol, days=graph_range*2)
                 quote_data = get_quote_data(symbol)
                 messages = get_simple_messages(symbol, quote_data)
-                draw = draw_graph_data(inkyphat, draw, data, messages)
+                draw = draw_graph_data(inkyphat, draw, data, messages, graph_range)
             except Exception as e:
                 messages = get_error_messages(e)
                 draw = draw_simple_messages(inkyphat, draw, messages, font_sizes)
@@ -88,6 +97,13 @@ if __name__ == "__main__":
         type=int,
         help="Ticker refresh interval (in sec)",
         default=10,
+    )
+    parser.add_argument(
+        "--graph_range",
+        "-r",
+        type=int,
+        help="Graph range in days (x axis)",
+        default=60,
     )
     parser.add_argument(
         "--hflip", help="Horizontally flip display", action="store_true"

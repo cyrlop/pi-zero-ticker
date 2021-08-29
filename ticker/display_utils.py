@@ -65,7 +65,7 @@ def draw_simple_messages(
     return draw
 
 
-def draw_graph_data(display, draw, data, simple_messages):
+def draw_graph_data(display, draw, data, simple_messages, graph_range):
     """Draw graph mode data
 
     Args:
@@ -89,14 +89,13 @@ def draw_graph_data(display, draw, data, simple_messages):
     draw.text((x, 25), message, display.BLACK, font)
 
     # Display graph
-    x_steps = 30
     x_margin_right = 50
 
     y_margin_top = 50
     y_margin_bot = 5
     y_range = display.HEIGHT - y_margin_top - y_margin_bot
 
-    price_data = list(data["close"])[-x_steps:]
+    price_data = list(data["close"])[-graph_range:]
     max_price = round(max(price_data), 2)
     min_price = round(min(price_data), 2)
 
@@ -107,8 +106,8 @@ def draw_graph_data(display, draw, data, simple_messages):
     y_data = [
         (display.HEIGHT * (y - min_price)) / (max_price - min_price) for y in price_data
     ]
-    for i in range(x_steps):
-        x = i * (display.WIDTH - x_margin_right) / x_steps
+    for i in range(graph_range):
+        x = i * (display.WIDTH - x_margin_right) / graph_range
         y = y_data[i]
         y = display.HEIGHT - y  # 0 on bottom
         y = y / display.HEIGHT * y_range + y_margin_top  # apply limited range (y_range)

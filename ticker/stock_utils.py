@@ -16,7 +16,7 @@ def get_quote_data(symbol):
     except Exception as e:
         raise Exception(f"get_quote_data() failed: {e}")
 
-def get_data(symbol):
+def get_data(symbol, days):
     """Get quote data a ticker symbol
 
     Args:
@@ -29,7 +29,7 @@ def get_data(symbol):
         today = date.today()
         df = stock_info.get_data(
             symbol,
-            start_date=today-timedelta(days=60),
+            start_date=today-timedelta(days=days),
             end_date=today,
         )
         return df
