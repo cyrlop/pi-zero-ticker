@@ -13,7 +13,7 @@ from stock_utils import (
 from display_utils import draw_text, draw_messages
 
 
-def main(symbol, delay, hflip, vflip, *args, **kwargs):
+def main(symbol, mode, delay, hflip, vflip, *args, **kwargs):
     # Initialize display
     inkyphat = InkyPHAT_SSD1608_Custom(
         colour="black",
@@ -23,25 +23,29 @@ def main(symbol, delay, hflip, vflip, *args, **kwargs):
 
     messages = None
     while True:
-        # Gather ticker data
-        try:
-            quote_data = get_quote_data(symbol)
-            new_messages = get_messages(symbol, quote_data)
-        except Exception as e:
-            new_messages = get_error_messages(e)
+        if mode == "simple":
+            # Gather ticker data
+            try:
+                quote_data = get_quote_data(symbol)
+                new_messages = get_messages(symbol, quote_data)
+            except Exception as e:
+                new_messages = get_error_messages(e)
 
-        if messages == new_messages:
-            time.sleep(delay)
-            continue
-        else:
-            messages = new_messages
+            if messages == new_messages:
+                time.sleep(delay)
+                continue
+            else:
+                messages = new_messages
 
-        # Show data on display
-        font_sizes = {"top": 24, "middle": 58, "bottom": 18}
+            # Show data on display
+            font_sizes = {"top": 24, "middle": 58, "bottom": 18}
 
-        img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
-        draw = ImageDraw.Draw(img)
-        draw = draw_messages(inkyphat, draw, messages, font_sizes)
+            img = Image.new("P", (inkyphat.WIDTH, inkyphat.HEIGHT))
+            draw = ImageDraw.Draw(img)
+            draw = draw_messages(inkyphat, draw, messages, font_sizes)
+
+        elif mode == "graph":
+            raise NotImplementedError("The mode 'graph' is not implemented yet")
 
         inkyphat.set_image(img)
         inkyphat.show()
@@ -61,6 +65,14 @@ if __name__ == "__main__":
         default="GME",
     )
     parser.add_argument(
+        "--mode",
+        "-m",
+        type=str,
+        choices=["simple", "graph"],
+        help="Display mode",
+        default="simple",
+    )
+    parser.add_argument(
         "--delay",
         "-d",
         type=int,
@@ -68,15 +80,9 @@ if __name__ == "__main__":
         default=10,
     )
     parser.add_argument(
-        "--hflip",
-        help="Horizontally flip display",
-        action="store_true"
+        "--hflip", help="Horizontally flip display", action="store_true"
     )
-    parser.add_argument(
-        "--vflip",
-        help="Vertically flip display",
-        action="store_true"
-    )
+    parser.add_argument("--vflip", help="Vertically flip display", action="store_true")
 
     args = parser.parse_args()
 
