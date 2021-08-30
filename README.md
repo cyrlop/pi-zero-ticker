@@ -16,8 +16,8 @@ Display your favourite stock price ticker on a display.
 ## Usage
 ```
 usage: ticker.py [-h] [--symbol SYMBOL] [--mode {simple,graph}]
-                 [--delay DELAY] [--graph_range GRAPH_RANGE] [--hflip]
-                 [--vflip]
+                 [--delay DELAY] [--graph_range GRAPH_RANGE]
+                 [--graph_int {1d,1wk,1mo,1m}] [--hflip] [--vflip]
 
 Script to display stock ticker price on a Inky pHAT display
 
@@ -30,7 +30,10 @@ optional arguments:
   --delay DELAY, -d DELAY
                         Ticker refresh interval (in sec)
   --graph_range GRAPH_RANGE, -r GRAPH_RANGE
-                        Graph range in days (x axis)
+                        Graph x range (nb ticks depending on interval)
+  --graph_int {1d,1wk,1mo,1m}, -i {1d,1wk,1mo,1m}
+                        Interval: '1d', '1wk', '1mo', or '1m' for daily,
+                        weekly, monthly, or minute data
   --hflip               Horizontally flip display
   --vflip               Vertically flip display
 ```
